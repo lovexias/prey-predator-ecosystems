@@ -1,6 +1,7 @@
 globals [
-  grass-regrow-time
+
 ]
+
 
 patches-own [
   grass?
@@ -26,14 +27,14 @@ to setup
   ]
 
   ;; Initial balanced populations
-  create-rabbits 100 [
+  create-rabbits initial-rabbits [
     set color white
     set size 1
     setxy random-xcor random-ycor
     set energy 10
   ]
 
-  create-foxes 100 [
+  create-foxes initial-foxes [
     set color red
     set size 2.5
     setxy random-xcor random-ycor
@@ -46,6 +47,7 @@ to setup
 end
 
 to go
+  if limit-500-ticks and ticks >= 500 [ stop ]
   if not any? turtles [ stop ]
 
   ask rabbits [ rabbit-behavior ]
@@ -63,7 +65,7 @@ to rabbit-behavior
   move
   set energy energy - 0.5
   eat-grass
-  if energy > 12 and random-float 1 < 0.10 [
+  if energy > 12 and random-float 1 < rabbit-reproduce-prob [
     reproduce-rabbit
   ]
   if energy <= 0 [ die ]
@@ -99,7 +101,7 @@ to fox-behavior
     set energy energy + 12
   ]
   move
-  if energy > 20 and random-float 1 < 0.04 [
+  if energy > 20 and random-float 1 < fox-reproduce-prob [
     reproduce-fox
   ]
   if energy <= 0 [ die ]
@@ -160,40 +162,6 @@ GRAPHICS-WINDOW
 ticks
 30.0
 
-BUTTON
-51
-84
-114
-117
-setup
-setup
-NIL
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
-BUTTON
-50
-145
-113
-178
-go
-go
-T
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
 MONITOR
 700
 81
@@ -226,6 +194,110 @@ count patches with [grass?]
 17
 1
 11
+
+BUTTON
+698
+296
+761
+329
+setup
+setup
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+700
+342
+763
+375
+go
+go
+T
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+INPUTBOX
+20
+30
+175
+90
+initial-rabbits
+100.0
+1
+0
+Number
+
+INPUTBOX
+21
+100
+176
+160
+initial-foxes
+100.0
+1
+0
+Number
+
+SLIDER
+23
+170
+195
+203
+grass-regrow-time
+grass-regrow-time
+1
+100
+20.0
+1
+1
+NIL
+HORIZONTAL
+
+INPUTBOX
+23
+215
+178
+275
+rabbit-reproduce-prob
+0.1
+1
+0
+Number
+
+INPUTBOX
+23
+287
+178
+347
+fox-reproduce-prob
+0.04
+1
+0
+Number
+
+SWITCH
+26
+370
+149
+403
+limit-500-ticks
+limit-500-ticks
+0
+1
+-1000
 
 @#$#@#$#@
 ## WHAT IS IT?
