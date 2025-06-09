@@ -31,14 +31,14 @@ to setup
     set color white
     set size 1
     setxy random-xcor random-ycor
-    set energy 10
+    set energy initial-rabbit-energy
   ]
 
   create-foxes initial-foxes [
     set color red
     set size 2.5
     setxy random-xcor random-ycor
-    set energy 25
+    set energy initial-fox-energy
   ]
 
   set grass-regrow-time 20
@@ -229,65 +229,6 @@ NIL
 NIL
 1
 
-INPUTBOX
-20
-30
-175
-90
-initial-rabbits
-100.0
-1
-0
-Number
-
-INPUTBOX
-21
-100
-176
-160
-initial-foxes
-100.0
-1
-0
-Number
-
-SLIDER
-23
-170
-195
-203
-grass-regrow-time
-grass-regrow-time
-1
-100
-20.0
-1
-1
-NIL
-HORIZONTAL
-
-INPUTBOX
-23
-215
-178
-275
-rabbit-reproduce-prob
-0.1
-1
-0
-Number
-
-INPUTBOX
-23
-287
-178
-347
-fox-reproduce-prob
-0.04
-1
-0
-Number
-
 SWITCH
 26
 370
@@ -295,9 +236,134 @@ SWITCH
 403
 limit-500-ticks
 limit-500-ticks
-0
+1
 1
 -1000
+
+SLIDER
+23
+17
+195
+50
+initial-rabbits
+initial-rabbits
+0
+200
+100.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+24
+64
+196
+97
+initial-foxes
+initial-foxes
+0
+200
+100.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+26
+110
+198
+143
+grass-regrow-time
+grass-regrow-time
+0
+100
+20.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+26
+162
+199
+195
+rabbit-reproduce-prob
+rabbit-reproduce-prob
+0
+1
+0.1
+0.01
+1
+NIL
+HORIZONTAL
+
+SLIDER
+28
+209
+200
+242
+fox-reproduce-prob
+fox-reproduce-prob
+0
+1
+0.04
+0.01
+1
+NIL
+HORIZONTAL
+
+SLIDER
+29
+255
+201
+288
+initial-rabbit-energy
+initial-rabbit-energy
+1
+20
+10.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+29
+301
+201
+334
+initial-fox-energy
+initial-fox-energy
+5
+50
+25.0
+1
+1
+NIL
+HORIZONTAL
+
+PLOT
+807
+75
+1007
+225
+Population Size Over Time
+Ticks
+Count
+0.0
+10.0
+0.0
+10.0
+true
+false
+"" ""
+PENS
+"rabbits" 1.0 0 -16777216 true "" "plot count rabbits"
+"foxes" 1.0 0 -7500403 true "" "plot count foxes"
+"grass" 1.0 0 -2674135 true "" "plot count patches with [grass?]"
 
 @#$#@#$#@
 ## WHAT IS IT?
