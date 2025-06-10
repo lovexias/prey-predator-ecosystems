@@ -52,8 +52,6 @@ to setup
     set age 0
   ]
 
-  set grass-regrow-time 20
-
   reset-ticks
 end
 
@@ -271,7 +269,7 @@ initial-rabbits
 initial-rabbits
 0
 200
-200.0
+100.0
 1
 1
 NIL
@@ -286,7 +284,7 @@ initial-foxes
 initial-foxes
 0
 200
-200.0
+100.0
 1
 1
 NIL
@@ -331,7 +329,7 @@ fox-reproduce-prob
 fox-reproduce-prob
 0
 1
-0.05
+0.04
 0.01
 1
 NIL
@@ -345,8 +343,8 @@ SLIDER
 initial-rabbit-energy
 initial-rabbit-energy
 1
-20
-12.0
+40
+20.0
 1
 1
 NIL
@@ -360,18 +358,18 @@ SLIDER
 initial-fox-energy
 initial-fox-energy
 5
-50
-32.0
+100
+50.0
 1
 1
 NIL
 HORIZONTAL
 
 PLOT
-807
-75
-1007
-225
+778
+10
+1538
+446
 Population Size Over Time
 Ticks
 Count
