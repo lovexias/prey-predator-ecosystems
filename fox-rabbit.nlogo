@@ -1,5 +1,11 @@
-globals [
+;; 1 tick = 1 week
+;; rabbit lifespan ≈ 100 weeks (2 years)
+;; fox lifespan ≈ 150 weeks (3 years)
 
+
+globals [
+  rabbit-max-age
+  fox-max-age
 ]
 
 
@@ -10,6 +16,7 @@ patches-own [
 
 turtles-own [
   energy
+  age
 ]
 
 breed [rabbits rabbit]
@@ -19,6 +26,8 @@ to setup
   clear-all
   set-default-shape rabbits "circle"
   set-default-shape foxes "wolf"
+  set rabbit-max-age 100
+  set fox-max-age 150
 
   ask patches [
     set grass? true
@@ -32,6 +41,7 @@ to setup
     set size 1
     setxy random-xcor random-ycor
     set energy initial-rabbit-energy
+    set age 0
   ]
 
   create-foxes initial-foxes [
@@ -39,6 +49,7 @@ to setup
     set size 2.5
     setxy random-xcor random-ycor
     set energy initial-fox-energy
+    set age 0
   ]
 
   set grass-regrow-time 20
@@ -47,6 +58,13 @@ to setup
 end
 
 to go
+  if ticks mod 50 = 0 [
+  set-current-plot "Population Size Over Time"
+  set-current-plot-pen "year-marker"
+  plotxy ticks 0
+  plotxy ticks 2000  ;
+  plotxy ticks + 0.001 0]
+
   if limit-500-ticks and ticks >= 500 [ stop ]
   if not any? turtles [ stop ]
 
@@ -62,18 +80,19 @@ end
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 to rabbit-behavior
+  set age age + 1
   move
   set energy energy - 0.5
   eat-grass
-  if energy > 12 and random-float 1 < rabbit-reproduce-prob [
+  if energy > (0.5 * initial-rabbit-energy) and random-float 1 < rabbit-reproduce-prob [
     reproduce-rabbit
   ]
-  if energy <= 0 [ die ]
+  if energy <= 0 or age > rabbit-max-age [ die ]
 end
 
 to eat-grass
   if grass? [
-    set energy energy + 6
+    set energy energy + (initial-rabbit-energy * 0.2)
     set grass? false
     set pcolor brown
     set grass-regrow-timer grass-regrow-time
@@ -82,11 +101,12 @@ end
 
 to reproduce-rabbit
   hatch 1 [
-    set energy 6
+    set energy energy / 1.5
+    set age 0
     rt random 360
     fd 1
   ]
-  set energy energy - 4
+  set energy energy - (energy * 0.5)
 end
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -94,26 +114,28 @@ end
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 to fox-behavior
-  set energy energy - 1
+  set age age + 1
+  set energy energy - 2
   let prey one-of rabbits-here
   if prey != nobody [
     ask prey [ die ]
-    set energy energy + 12
+    set energy energy + (initial-fox-energy * 0.5)
   ]
   move
-  if energy > 20 and random-float 1 < fox-reproduce-prob [
+  if energy >  (1.5 * initial-fox-energy) and random-float 1 < fox-reproduce-prob [
     reproduce-fox
   ]
-  if energy <= 0 [ die ]
+  if energy <= 0 or age > fox-max-age [ die ]
 end
 
 to reproduce-fox
   hatch 1 [
-    set energy 10
+    set energy energy / 1.5
+    set age 0
     rt random 360
     fd 1
   ]
-  set energy energy - 8
+  set energy energy - (energy * 0.5)
 end
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -236,7 +258,7 @@ SWITCH
 403
 limit-500-ticks
 limit-500-ticks
-1
+0
 1
 -1000
 
@@ -249,7 +271,7 @@ initial-rabbits
 initial-rabbits
 0
 200
-100.0
+200.0
 1
 1
 NIL
@@ -264,7 +286,7 @@ initial-foxes
 initial-foxes
 0
 200
-100.0
+200.0
 1
 1
 NIL
@@ -309,7 +331,7 @@ fox-reproduce-prob
 fox-reproduce-prob
 0
 1
-0.04
+0.05
 0.01
 1
 NIL
@@ -324,7 +346,7 @@ initial-rabbit-energy
 initial-rabbit-energy
 1
 20
-10.0
+12.0
 1
 1
 NIL
@@ -339,7 +361,7 @@ initial-fox-energy
 initial-fox-energy
 5
 50
-25.0
+32.0
 1
 1
 NIL
@@ -364,6 +386,7 @@ PENS
 "rabbits" 1.0 0 -16777216 true "" "plot count rabbits"
 "foxes" 1.0 0 -7500403 true "" "plot count foxes"
 "grass" 1.0 0 -2674135 true "" "plot count patches with [grass?]"
+"year-marker" 1.0 0 -11033397 true "" ""
 
 @#$#@#$#@
 ## WHAT IS IT?
